@@ -92,16 +92,16 @@
 
 
   let icon = L.icon({
-    iconUrl:"img/pothole.png",
-    iconSize: [20, 18],
-    iconAnchor: [10, 9]
+    iconUrl:"img/tree.svg",
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
   });
 
   let markers = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 100; i++) {
     let marker = L.marker([30.975406329380352 - Math.random() * 0.1, 120.77122517846198 + Math.random() * 0.1], {icon}).bindPopup("I Am " + i)
     if (i % 2 === 0) {
-      marker.render = function (context, pointPos, devicePixelRatio) {
+      marker.render = function (context, pointPos, devicePixelRatio,options) {
         if (!this.radius) {
           this.radius = 5
           this.d = 0
@@ -116,7 +116,7 @@
           } else {
             //-
             if (this.radius > 1) {
-              this.radius -= 0.1
+              this.radius -= 0.3
             } else {
               this.d = 0
             }
@@ -155,31 +155,15 @@
           context.closePath()
         }
 
-        //绘制形状
-        context.beginPath();
-        context.lineWidth = 4;
-        context.strokeStyle = '#57ff6d';
-
-        // 绘制圆的路径**
-        context.arc(
-          pointPos.x * devicePixelRatio,
-          pointPos.y * devicePixelRatio,
-          this.radius * devicePixelRatio,
-          0,
-          Math.PI * 2,
-          false);
-        context.stroke();
-        context.beginPath();
-        context.arc(
-          pointPos.x * devicePixelRatio,
-          pointPos.y * devicePixelRatio,
-          this.radius * 2 * devicePixelRatio,
-          0,
-          Math.PI * 2,
-          true);
-
-        // 描边路径
-        context.stroke();
+        // let pp = (60 - this.radius) / 40
+        let r = (20/8)*this.radius + (340/8)
+        context.drawImage(
+          marker.canvas_img,
+          (pointPos.x - r/2) * devicePixelRatio,
+          (pointPos.y - r/2) * devicePixelRatio,
+          r * devicePixelRatio,
+          r * devicePixelRatio
+        );
       }
     } else {
       marker.render = function (context, pointPos, devicePixelRatio) {
