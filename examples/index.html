@@ -86,98 +86,182 @@
   // })
 
 
-  var ciLayer = L.canvasIconLayer({}).addTo(map);
+  let ciLayer = L.canvasIconLayer({}).addTo(map);
   // ciLayer.addOnClickListener(function (e,data) {console.log(data)});
   // ciLayer.addOnHoverListener(function (e,data) {console.log(data[0].data._leaflet_id)});
 
 
-    var icon = L.icon({
-      iconSize: [20, 18],
-      iconAnchor: [10, 9]
-    });
+  let icon = L.icon({
+    iconUrl:"img/pothole.png",
+    iconSize: [20, 18],
+    iconAnchor: [10, 9]
+  });
 
-  var markers = [];
+  let markers = [];
   for (let i = 0; i < 100; i++) {
-    let marker = L.marker([30.975406329380352 - Math.random() * 0.1, 120.77122517846198 + Math.random() * 0.1],{icon}).bindPopup("I Am " + i)
-    marker.render = function (context, marker, pointPos, devicePixelRatio) {
-      if (!marker.radius) {
-        marker.radius = 5
-        marker.d = 0
-      } else {
-        if (marker.d === 0) {
-          //+
-          if (marker.radius < 10) {
-            marker.radius += 0.1
-          } else {
-            marker.d = 1
-          }
+    let marker = L.marker([30.975406329380352 - Math.random() * 0.1, 120.77122517846198 + Math.random() * 0.1], {icon}).bindPopup("I Am " + i)
+    if (i % 2 === 0) {
+      marker.render = function (context, pointPos, devicePixelRatio) {
+        if (!this.radius) {
+          this.radius = 5
+          this.d = 0
         } else {
-          //-
-          if (marker.radius > 1) {
-            marker.radius -= 0.1
+          if (this.d === 0) {
+            //+
+            if (this.radius < 10) {
+              this.radius += 0.1
+            } else {
+              this.d = 1
+            }
           } else {
-            marker.d = 0
+            //-
+            if (this.radius > 1) {
+              this.radius -= 0.1
+            } else {
+              this.d = 0
+            }
           }
         }
-      }
 
-      if (marker.d === 0) {
+        if (this.d === 0) {
+          context.beginPath();
+          context.arc(
+            pointPos.x * devicePixelRatio,
+            pointPos.y * devicePixelRatio,
+            this.radius * 10 * devicePixelRatio,
+            0,
+            Math.PI * 2,
+            true);
+          // 描边路径
+
+          let p = (10 - this.radius) / 10
+          context.fillStyle = `rgba(87,255,109,${p})`;
+          context.fill();
+          context.closePath()
+
+          context.beginPath();
+          context.arc(
+            pointPos.x * devicePixelRatio,
+            pointPos.y * devicePixelRatio,
+            this.radius * 4 * devicePixelRatio,
+            0,
+            Math.PI * 2,
+            true);
+          // 描边路径
+
+          p = (10 - this.radius) / 10
+          context.fillStyle = `rgba(87,255,109,${p})`;
+          context.fill();
+          context.closePath()
+        }
+
+        //绘制形状
+        context.beginPath();
+        context.lineWidth = 4;
+        context.strokeStyle = '#57ff6d';
+
+        // 绘制圆的路径**
+        context.arc(
+          pointPos.x * devicePixelRatio,
+          pointPos.y * devicePixelRatio,
+          this.radius * devicePixelRatio,
+          0,
+          Math.PI * 2,
+          false);
+        context.stroke();
         context.beginPath();
         context.arc(
           pointPos.x * devicePixelRatio,
           pointPos.y * devicePixelRatio,
-          marker.radius * 10 * devicePixelRatio,
+          this.radius * 2 * devicePixelRatio,
           0,
           Math.PI * 2,
           true);
+
         // 描边路径
+        context.stroke();
+      }
+    } else {
+      marker.render = function (context, pointPos, devicePixelRatio) {
+        if (!this.radius) {
+          this.radius = 5
+          this.d = 0
+        } else {
+          if (this.d === 0) {
+            //+
+            if (this.radius < 10) {
+              this.radius += 0.1
+            } else {
+              this.d = 1
+            }
+          } else {
+            //-
+            if (this.radius > 1) {
+              this.radius -= 0.1
+            } else {
+              this.d = 0
+            }
+          }
+        }
 
-        let p = (10 - marker.radius) / 10
-        context.fillStyle = `rgba(222,68,68,${p})`;
-        context.fill();
-        context.closePath()
+        if (this.d === 0) {
+          context.beginPath();
+          context.arc(
+            pointPos.x * devicePixelRatio,
+            pointPos.y * devicePixelRatio,
+            this.radius * 10 * devicePixelRatio,
+            0,
+            Math.PI * 2,
+            true);
+          // 描边路径
 
+          let p = (10 - this.radius) / 10
+          context.fillStyle = `rgba(255,26,129,${p})`;
+          context.fill();
+          context.closePath()
+
+          context.beginPath();
+          context.arc(
+            pointPos.x * devicePixelRatio,
+            pointPos.y * devicePixelRatio,
+            this.radius * 4 * devicePixelRatio,
+            0,
+            Math.PI * 2,
+            true);
+          // 描边路径
+
+          p = (10 - this.radius) / 10
+          context.fillStyle = `rgba(255,26,129,${p})`;
+          context.fill();
+          context.closePath()
+        }
+
+        //绘制形状
+        context.beginPath();
+        context.lineWidth = 4;
+        context.strokeStyle = '#ff1a81';
+
+        // 绘制圆的路径**
+        context.arc(
+          pointPos.x * devicePixelRatio,
+          pointPos.y * devicePixelRatio,
+          this.radius * devicePixelRatio,
+          0,
+          Math.PI * 2,
+          false);
+        context.stroke();
         context.beginPath();
         context.arc(
           pointPos.x * devicePixelRatio,
           pointPos.y * devicePixelRatio,
-          marker.radius * 4 * devicePixelRatio,
+          this.radius * 2 * devicePixelRatio,
           0,
           Math.PI * 2,
           true);
+
         // 描边路径
-
-        p = (10 - marker.radius) / 10
-        context.fillStyle = `rgba(222,68,68,${p})`;
-        context.fill();
-        context.closePath()
+        context.stroke();
       }
-
-      //绘制形状
-      context.beginPath();
-      context.lineWidth = 4;
-      context.strokeStyle = '#57ff6d';
-
-      // 绘制圆的路径**
-      context.arc(
-        pointPos.x * devicePixelRatio,
-        pointPos.y * devicePixelRatio,
-        marker.radius * devicePixelRatio,
-        0,
-        Math.PI * 2,
-        false);
-      context.stroke();
-      context.beginPath();
-      context.arc(
-        pointPos.x * devicePixelRatio,
-        pointPos.y * devicePixelRatio,
-        marker.radius * 2 * devicePixelRatio,
-        0,
-        Math.PI * 2,
-        true);
-
-      // 描边路径
-      context.stroke();
     }
     markers.push(marker);
   }

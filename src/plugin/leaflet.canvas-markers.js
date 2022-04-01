@@ -213,16 +213,19 @@ function layerFactory(L) {
         },
         _drawImage: function (marker, pointPos) {
             var options = marker.options.icon.options;
-            marker.render(this._context,marker,pointPos,this._devicePixelRatio,options)
-            // REMOVE  核心，通过自定义canvas绘制方法
-            // this._context.drawImage(
-            //     marker.canvas_img,
-            //     pointPos.x - options.iconAnchor[0],
-            //     pointPos.y - options.iconAnchor[1],
-            //     options.iconSize[0],
-            //     options.iconSize[1]
-            // );
-            // console.log(123123)
+
+            if (marker.render) {
+                marker.render(this._context,pointPos,this._devicePixelRatio,options)
+                return
+            }
+
+            this._context.drawImage(
+                marker.canvas_img,
+                (pointPos.x - options.iconAnchor[0]) * this._devicePixelRatio,
+                (pointPos.y - options.iconAnchor[1]) * this._devicePixelRatio,
+                options.iconSize[0] * this._devicePixelRatio,
+                options.iconSize[1] * this._devicePixelRatio
+            );
         },
         _reset: function () {
             var topLeft = this._map.containerPointToLayerPoint([0, 0]);
